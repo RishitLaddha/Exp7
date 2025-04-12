@@ -1,20 +1,16 @@
 pipeline {
     agent any
-    triggers {
-        // Poll SCM every 5 minutes
-        pollSCM('H/5 * * * *')
-    }
     stages {
         stage('Build') {
             steps {
-                // Adjust to use 'sh' if your environment is Unix-based
-                bat 'mvn clean package'
+                // Use 'sh' to run Maven on Linux
+                sh 'mvn clean package'
             }
         }
         stage('Deploy') {
             steps {
-                // Adjust the command syntax if necessary; here assuming Windows batch commands
-                bat 'docker cp target\\Exp7.war tomcat_container:/usr/local/tomcat/webapps'
+                // Use forward-slashes for Linux paths; adjust the docker command accordingly
+                sh 'docker cp target/Exp7.war tomcat_container:/usr/local/tomcat/webapps'
             }
         }
     }
