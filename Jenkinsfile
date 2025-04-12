@@ -3,11 +3,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    docker.image('maven:3.8.6-openjdk-11').inside('-v $HOME/.m2:/root/.m2') {
-                        sh 'mvn clean package'
-                    }
-                }
+                // Run Maven using a Docker command
+                sh '''
+                docker run --rm -v "$PWD":/workspace -v "$HOME/.m2":/root/.m2 -w /workspace maven:3.8.6-openjdk-11 mvn clean package
+                '''
             }
         }
         stage('Deploy') {
